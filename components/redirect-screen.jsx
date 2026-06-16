@@ -7,13 +7,20 @@ import { SafeImage } from "@/components/safe-image"
 
 export function RedirectScreen({ payload }) {
   const [seconds, setSeconds] = useState(2)
+  const [error, setError] = useState(false)
 
   useEffect(() => {
     const countdown = window.setInterval(() => {
       setSeconds((current) => Math.max(0, current - 1))
     }, 1000)
     const redirect = window.setTimeout(() => {
-      window.location.replace(payload.url)
+      try {
+        window.location.replace(payload.url)
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error("Redirect failed", err, payload.url)
+        setError(true)
+      }
     }, 2200)
 
     return () => {
@@ -67,13 +74,36 @@ export function RedirectScreen({ payload }) {
             <span className="block h-full rounded-full bg-primary" />
           </div>
 
-          <a
-            href={payload.url}
-            className="inline-flex h-10 items-center gap-2 rounded-lg bg-primary px-5 text-sm font-medium text-primary-foreground transition-transform hover:scale-[1.02]"
-          >
-            Ir agora
-            <ArrowRight className="size-4" />
-          </a>
+          {error ? (
+            <div className="flex flex-col items-center gap-3">
+              <p className="text-sm text-muted-foreground">
+                Não foi possível redirecionar automaticamente. Você pode abrir o destino manualmente.
+              </p>
+              <a
+                href={payload.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex h-10 items-center gap-2 rounded-lg bg-primary px-5 text-sm font-medium text-primary-foreground transition-transform hover:scale-[1.02]"
+                onClick={() => {
+                  // eslint-disable-next-line no-console
+                  console.log("Manual open click", payload.url)
+                }}
+              >
+                Abrir destino
+                <ArrowRight className="size-4" />
+              </a>
+            </div>
+          ) : (
+            <a
+              href={payload.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex h-10 items-center gap-2 rounded-lg bg-primary px-5 text-sm font-medium text-primary-foreground transition-transform hover:scale-[1.02]"
+            >
+              Ir agora
+              <ArrowRight className="size-4" />
+            </a>
+          )}
 
           <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
             <ShieldCheck className="size-3.5" />

@@ -8,8 +8,16 @@ export const revalidate = 0
 export const runtime = "nodejs"
 
 async function getPayload(params) {
-  const { token } = await params
-  return typeof token === "string" ? readRedirectToken(token) : null
+  const { token } = params
+  try {
+    return typeof token === "string" ? readRedirectToken(token) : null
+  } catch (err) {
+    // Log unexpected errors when reading the token server-side
+    // so we can inspect token content in server logs.
+    // eslint-disable-next-line no-console
+    console.error("readRedirectToken error", { token, error: err })
+    return null
+  }
 }
 
 export async function generateMetadata({ params }) {
@@ -29,6 +37,9 @@ export default async function ShortRedirectPage({ params }) {
   const payload = await getPayload(params)
 
   if (!payload) {
+    // Log invalid/expired token for debugging purposes
+    // eslint-disable-next-line no-console
+    console.error("Invalid or expired redirect token", { token: params?.token })
     return (
       <main className="flex min-h-svh items-center justify-center px-4">
         <div className="redirect-enter max-w-md rounded-2xl border bg-card p-8 text-center shadow-xl">

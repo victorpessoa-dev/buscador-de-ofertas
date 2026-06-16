@@ -82,7 +82,8 @@ export async function POST(request: Request) {
       url: result.affiliateUrl,
     })
     const baseUrl = getBaseUrl(request)
-    const redirectUrl = new URL(`/g/${token}`, baseUrl)
+    // encode the token when building the path to ensure it is safe in the URL
+    const redirectUrl = new URL(`/g/${encodeURIComponent(token)}`, baseUrl)
     const redirectUrlString = redirectUrl.toString()
 
     return json({
