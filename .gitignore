@@ -1,7 +1,3 @@
-.snowflake/
-.v0-trash/
-.vercel/
-
 # Environment variables
 .env*.local
 

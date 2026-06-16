@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og"
 import { SITE_DESCRIPTION, SITE_NAME } from "@/lib/site-metadata"
 
-export const alt = `${SITE_NAME} - Gerador e encurtador de links`
+export const alt = `${SITE_NAME} - Gerador de links de afiliado`
 export const size = {
   width: 1200,
   height: 630,
@@ -70,7 +70,7 @@ export default function OpenGraphImage() {
               marginTop: 40,
             }}
           >
-            Gere e encurte links de afiliado
+            Gere links de afiliado
           </div>
           <div
             style={{

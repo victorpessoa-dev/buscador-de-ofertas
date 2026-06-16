@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { convertAffiliateLink } from "@/lib/affiliate-server"
-import { createShortLink } from "@/lib/short-links"
+import { createRedirectToken } from "@/lib/redirect-token"
 import { consumeRateLimit } from "@/lib/rate-limit"
 
 export const runtime = "nodejs"
@@ -78,7 +78,7 @@ export async function POST(request: Request) {
     }
 
     const result = await convertAffiliateLink(body.url)
-    const shortCode = await createShortLink({
+    const token = createRedirectToken({
       url: result.affiliateUrl,
       title: result.product?.title,
       description: result.product?.description,
@@ -86,12 +86,14 @@ export async function POST(request: Request) {
       platformLabel: result.platformLabel,
     })
     const baseUrl = getBaseUrl(request)
-    const shortUrl = new URL(`/s/${shortCode}`, baseUrl).toString()
+    const redirectUrl = new URL("/go", baseUrl)
+    redirectUrl.searchParams.set("token", token)
+    const redirectUrlString = redirectUrl.toString()
 
     return json({
       ...result,
-      redirectUrl: shortUrl,
-      shortUrl,
+      redirectUrl: redirectUrlString,
+      shortUrl: redirectUrlString,
     })
   } catch (error) {
     const message =

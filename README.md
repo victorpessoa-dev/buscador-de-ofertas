@@ -118,35 +118,22 @@ npm run build
 4. A API configurada é utilizada, quando disponível.
 5. Se a API não estiver disponível, os parâmetros do ID de afiliado são
    adicionados diretamente à URL.
-6. O sistema cria um link assinado em `/go` e um link compacto em `/s`.
-7. O link curto exibe uma tela de transição e redireciona o visitante para a
+6. O sistema cria um link assinado em `/go?token=...`, sem salvar o destino no
+   servidor.
+7. O link assinado exibe uma tela de transição e redireciona o visitante para a
    URL de afiliado.
 
-## Encurtador
+## Links gerados
 
 O link principal exibido e copiado pelo gerador usa o formato:
 
 ```text
-https://seu-dominio.com/s/codigo-assinado
+https://seu-dominio.com/go?token=codigo-assinado
 ```
 
-O código possui somente 8 caracteres, por exemplo:
-
-```text
-https://seu-dominio.com/s/K7p2xQ9a
-```
-
-Os destinos são armazenados em `.data/short-links.json`, que não é enviado ao
-Git. Os links:
-
-- continuam funcionando após reiniciar a aplicação;
-- reutilizam o mesmo código quando o destino já foi encurtado;
-- aceitam apenas destinos HTTP ou HTTPS;
-- expiram depois de 30 dias.
-
-Em produção, a pasta `.data` precisa estar em um volume persistente. Plataformas
-serverless com sistema de arquivos temporário exigem um banco ou serviço de KV
-para manter os códigos entre implantações.
+O destino fica dentro do token assinado e expira depois de 30 dias. O app não
+salva links em banco, KV, arquivo ou qualquer outro armazenamento no servidor.
+Somente o histórico local do navegador é salvo em `localStorage`.
 
 ## Prévia do produto
 

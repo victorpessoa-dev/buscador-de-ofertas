@@ -55,7 +55,6 @@ export function AffiliateConverter() {
         originalUrl: converted.originalUrl,
         affiliateUrl: converted.affiliateUrl,
         redirectUrl: converted.redirectUrl,
-        shortUrl: converted.shortUrl,
         product: converted.product,
       })
     } catch (err) {
@@ -74,7 +73,7 @@ export function AffiliateConverter() {
     if (!result) return
 
     try {
-      await navigator.clipboard.writeText(result.shortUrl)
+      await navigator.clipboard.writeText(result.redirectUrl)
       setCopied(true)
       if (copiedTimer.current) window.clearTimeout(copiedTimer.current)
       copiedTimer.current = window.setTimeout(() => setCopied(false), 2000)
@@ -158,7 +157,7 @@ export function AffiliateConverter() {
                       />
                     </span>
                     <span className="text-xs text-muted-foreground">
-                      Link curto com redirecionamento
+                      Link com redirecionamento
                     </span>
                   </div>
                   <h2 className="mt-3 text-pretty font-semibold">
@@ -177,7 +176,7 @@ export function AffiliateConverter() {
                 </div>
 
                 <p className="break-all rounded-md bg-background px-3 py-2 font-mono text-xs">
-                  {result.shortUrl}
+                  {result.redirectUrl}
                 </p>
 
                 <div className="flex flex-col gap-2 sm:flex-row">
@@ -191,7 +190,7 @@ export function AffiliateConverter() {
                   </Button>
                   <Button
                     nativeButton={false}
-                    render={<a href={result.shortUrl} target="_blank" rel="noreferrer" />}
+                    render={<a href={result.redirectUrl} target="_blank" rel="noreferrer" />}
                     className="action-button gap-2 shadow-md shadow-primary/15 sm:w-auto"
                   >
                     Abrir link

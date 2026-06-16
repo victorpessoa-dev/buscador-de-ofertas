@@ -12,14 +12,13 @@ const geistMono = Geist_Mono({
 export const metadata = {
   metadataBase: getSiteUrl(),
   title: {
-    default: `${SITE_NAME} | Gerador e Encurtador`,
+    default: `${SITE_NAME} | Gerador de Links`,
     template: `%s | ${SITE_NAME}`,
   },
   description: SITE_DESCRIPTION,
   applicationName: SITE_NAME,
   keywords: [
     'gerador de link de afiliado',
-    'encurtador de link',
     'Shopee afiliados',
     'Mercado Livre afiliados',
     'link de afiliado',
@@ -51,20 +50,20 @@ export const metadata = {
     locale: 'pt_BR',
     url: '/',
     siteName: SITE_NAME,
-    title: `${SITE_NAME} | Gerador e Encurtador`,
+    title: `${SITE_NAME} | Gerador de Links`,
     description: SITE_DESCRIPTION,
     images: [
       {
         url: '/opengraph-image',
         width: 1200,
         height: 630,
-        alt: `${SITE_NAME} - Gerador e encurtador de links`,
+        alt: `${SITE_NAME} - Gerador de links de afiliado`,
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: `${SITE_NAME} | Gerador e Encurtador`,
+    title: `${SITE_NAME} | Gerador de Links`,
     description: SITE_DESCRIPTION,
     images: ['/opengraph-image'],
   },

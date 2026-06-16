@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 
 export const SITE_NAME = "Link de Afiliado"
 export const SITE_DESCRIPTION =
-  "Gere, personalize e encurte links de afiliado da Shopee e do Mercado Livre."
+  "Gere links de afiliado da Shopee e do Mercado Livre."
 
 export function getSiteUrl() {
   const configuredUrl = process.env.APP_URL || "http://localhost:3000"
