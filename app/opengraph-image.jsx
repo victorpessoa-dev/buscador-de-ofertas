@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og"
 import { SITE_DESCRIPTION, SITE_NAME } from "@/lib/site-metadata"
 
-export const alt = `${SITE_NAME} - Gerador de links de afiliado`
+export const alt = `${SITE_NAME} - Encontre ofertas da Shopee e do Mercado Livre`
 export const size = {
   width: 1200,
   height: 630,
@@ -70,7 +70,7 @@ export default function OpenGraphImage() {
               marginTop: 40,
             }}
           >
-            Gere links de afiliado
+            Buscador de Ofertas
           </div>
           <div
             style={{

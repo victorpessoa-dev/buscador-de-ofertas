@@ -1,5 +1,5 @@
-import { Link2 } from "lucide-react"
-import { AffiliateConverter } from "@/components/affiliate-converter"
+import { Search } from "lucide-react"
+import { OfferSearch } from "@/components/offer-search"
 import { getSiteUrl, SITE_DESCRIPTION, SITE_NAME } from "@/lib/site-metadata"
 
 export default function Page() {
@@ -31,34 +31,34 @@ export default function Page() {
       <div className="site-glow site-glow-two" />
 
       <header className="site-header sticky top-0 z-20 border-b border-white/15 text-primary-foreground">
-        <div className="mx-auto flex w-full max-w-3xl items-center gap-3 px-4 py-3">
+        <div className="mx-auto flex w-full max-w-7xl items-center gap-3 px-4 py-3 sm:px-6 lg:px-8">
           <div className="brand-mark flex size-10 items-center justify-center rounded-xl bg-white/15 shadow-lg ring-1 ring-white/20">
             <img src="/icon.svg" alt="" className="size-8 rounded-lg" />
           </div>
           <div className="header-copy flex flex-col leading-tight">
-            <span className="text-base font-bold tracking-tight">Gerador de Links</span>
+            <span className="text-base font-bold tracking-tight">{SITE_NAME}</span>
             <span className="text-xs text-primary-foreground/80">
-              Links em poucos segundos
+              Ofertas em poucos segundos
             </span>
           </div>
         </div>
       </header>
 
-      <main className="relative z-10 mx-auto w-full max-w-3xl px-4 py-10 sm:py-16">
+      <main className="relative z-10 mx-auto w-full max-w-7xl px-3 py-8 sm:px-6 sm:py-12 lg:px-8">
         <section className="hero-enter flex flex-col gap-7">
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-2">
-              <Link2 className="size-3.5" />
+              <Search className="size-3.5" />
               <h1 className="text-xl font-semibold tracking-tight sm:text-2xl">
-                Gere link de afiliado
+                Buscador de Ofertas
               </h1>
             </div>
             <p className="max-w-2xl leading-relaxed text-muted-foreground">
-              Cole um link da Shopee ou do Mercado Livre para aplicar o identificador
-              de afiliado. Seus links recentes ficam salvos no histórico deste navegador.
+              Encontre ofertas da Shopee e do Mercado Livre por nome ou link, com filtros,
+              pontuacao automatica e botoes convertidos para afiliado.
             </p>
           </div>
-          <AffiliateConverter />
+          <OfferSearch />
         </section>
       </main>
     </div>

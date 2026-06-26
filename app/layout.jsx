@@ -1,20 +1,19 @@
-import { Analytics } from '@vercel/analytics/next'
 import { getSiteUrl, SITE_DESCRIPTION, SITE_NAME } from '@/lib/site-metadata'
 import './globals.css'
 
 export const metadata = {
   metadataBase: getSiteUrl(),
   title: {
-    default: `${SITE_NAME} | Gerador de Links`,
+    default: SITE_NAME,
     template: `%s | ${SITE_NAME}`,
   },
   description: SITE_DESCRIPTION,
   applicationName: SITE_NAME,
   keywords: [
-    'gerador de link de afiliado',
-    'Shopee afiliados',
-    'Mercado Livre afiliados',
-    'link de afiliado',
+    'buscador de ofertas',
+    'Shopee ofertas',
+    'Mercado Livre ofertas',
+    'ofertas de produtos',
   ],
   authors: [{ name: SITE_NAME }],
   creator: SITE_NAME,
@@ -43,20 +42,20 @@ export const metadata = {
     locale: 'pt_BR',
     url: '/',
     siteName: SITE_NAME,
-    title: `${SITE_NAME} | Gerador de Links`,
+    title: SITE_NAME,
     description: SITE_DESCRIPTION,
     images: [
       {
         url: '/opengraph-image',
         width: 1200,
         height: 630,
-        alt: `${SITE_NAME} - Gerador de links de afiliado`,
+        alt: `${SITE_NAME} - Encontre as melhores ofertas`,
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: `${SITE_NAME} | Gerador de Links`,
+    title: SITE_NAME,
     description: SITE_DESCRIPTION,
     images: ['/opengraph-image'],
   },
@@ -78,7 +77,6 @@ export default function RootLayout({ children }) {
     >
       <body className="font-sans antialiased">
         {children}
-        {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
   )

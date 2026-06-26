@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { convertAffiliateLink } from "@/lib/affiliate-server";
 import { consumeRateLimit } from "@/lib/rate-limit";
 import { logAffiliateConversion } from "@/lib/affiliate-logger";
+import { getSiteUrl } from "@/lib/site-metadata";
 export const runtime = "nodejs";
 function getClientKey(request) {
     const directIp = request.headers.get("cf-connecting-ip") ||
@@ -21,14 +22,7 @@ function getBaseUrl(request) {
     if (process.env.NODE_ENV !== "production") {
         return new URL(request.url).origin;
     }
-    const configured = process.env.APP_URL;
-    if (!configured)
-        return new URL(request.url).origin;
-    const url = new URL(configured);
-    if (url.protocol !== "https:" && url.protocol !== "http:") {
-        throw new Error("APP_URL precisa usar http:// ou https://.");
-    }
-    return url.origin;
+    return getSiteUrl().origin || new URL(request.url).origin;
 }
 function createLoadingUrl(request, result) {
     const url = new URL("/go", getBaseUrl(request));

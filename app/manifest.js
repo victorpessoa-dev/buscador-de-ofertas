@@ -2,7 +2,7 @@ import { SITE_DESCRIPTION, SITE_NAME } from "@/lib/site-metadata"
 
 export default function manifest() {
   return {
-    name: `${SITE_NAME} - Gerador de Links`,
+    name: SITE_NAME,
     short_name: SITE_NAME,
     description: SITE_DESCRIPTION,
     start_url: "/",

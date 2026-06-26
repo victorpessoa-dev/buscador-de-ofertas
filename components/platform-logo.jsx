@@ -43,11 +43,12 @@ export function PlatformLogo({
   const key = resolvePlatform(platform, platformLabel)
   const logo = key ? PLATFORM_LOGOS[key] : null
   const sizeClass = size === "sm" ? "size-7 rounded-md" : "size-10 rounded-lg"
+  const frameClass = logo?.frameClass || "bg-muted"
 
   return (
     <span className="inline-flex items-center gap-2">
       <span
-        className={`inline-flex shrink-0 items-center justify-center overflow-hidden border border-black/10 ${sizeClass} ${logo.frameClass}`}
+        className={`inline-flex shrink-0 items-center justify-center overflow-hidden border border-black/10 ${sizeClass} ${frameClass}`}
       >
         {!logo || failed ? (
           <ShoppingBag className="size-1/2 text-foreground/60" />
