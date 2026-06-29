@@ -61,8 +61,8 @@ export async function POST(request) {
     return json(result);
   } catch (error) {
     const message =
-      error instanceof Error ? error.message : "Nao foi possivel buscar ofertas.";
-    const status = message.includes("Playwright") ? 500 : 400;
+      error instanceof Error ? error.message : "Não foi possível buscar ofertas.";
+    const status = /Playwright|Chromium|browserType|spawn|navegador|serverless/i.test(message) ? 500 : 400;
     return json({ error: message }, { status });
   }
 }

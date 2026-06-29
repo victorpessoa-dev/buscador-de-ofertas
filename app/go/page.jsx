@@ -30,7 +30,7 @@ function InvalidLink() {
   return (
     <main className="flex min-h-svh items-center justify-center px-4">
       <div className="redirect-enter max-w-md rounded-2xl border bg-card p-8 text-center shadow-xl">
-        <h1 className="text-xl font-semibold">Link invalido</h1>
+        <h1 className="text-xl font-semibold">Link inválido</h1>
         <p className="mt-2 text-sm text-muted-foreground">
           Gere um novo link para continuar.
         </p>
@@ -50,7 +50,7 @@ export async function generateMetadata({ searchParams }) {
 
   if (!payload) {
     return createOfferMetadata({
-      title: "Link invalido",
+      title: "Link inválido",
       description: "Gere um novo link para continuar.",
     })
   }

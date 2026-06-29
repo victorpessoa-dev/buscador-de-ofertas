@@ -59,7 +59,7 @@ export function RedirectScreen({ payload }) {
               {payload.title || "Preparando sua oferta"}
             </h1>
             <p aria-live="polite" className="mt-2 text-sm text-muted-foreground">
-              Voce sera redirecionado em {seconds} segundo{seconds === 1 ? "" : "s"}.
+              Você será redirecionado em {seconds} segundo{seconds === 1 ? "" : "s"}.
             </p>
           </div>
 
@@ -70,7 +70,7 @@ export function RedirectScreen({ payload }) {
           {error ? (
             <div className="flex flex-col items-center gap-3">
               <p className="text-sm text-muted-foreground">
-                Nao foi possivel redirecionar automaticamente.
+                Não foi possível redirecionar automaticamente.
               </p>
               <a
                 href={payload.url}
