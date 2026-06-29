@@ -55,7 +55,7 @@ export default function Page() {
             </div>
             <p className="max-w-2xl leading-relaxed text-muted-foreground">
               Encontre ofertas da Shopee e do Mercado Livre por nome ou link, com filtros,
-              pontuacao automatica e botoes convertidos para afiliado.
+              pontuação automática e botões convertidos para afiliado.
             </p>
           </div>
           <OfferSearch />

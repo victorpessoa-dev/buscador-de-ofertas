@@ -67,9 +67,9 @@ test('searches offers with filters and renders affiliate results', async ({ page
   await page.getByPlaceholder('Digite o nome do produto ou cole um link').fill('Tinta Epson T544');
   await page.getByLabel('Marketplace').selectOption('mercadolivre');
   await page.getByLabel('Desconto').selectOption('20');
-  await page.getByLabel('Preco maximo').fill('150');
-  await page.getByLabel('Avaliacao').selectOption('4.5');
-  await page.getByLabel('Frete gratis').check();
+  await page.getByLabel('Preço máximo').fill('150');
+  await page.getByLabel('Avaliação').selectOption('4.5');
+  await page.getByLabel('Frete grátis').check();
   await Promise.all([
     page.waitForResponse('**/api/offers'),
     page.getByRole('button', { name: 'Buscar Ofertas' }).click(),

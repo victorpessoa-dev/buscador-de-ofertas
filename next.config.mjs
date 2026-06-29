@@ -1,9 +1,13 @@
-﻿/** @type {import('next').NextConfig} */
+import { fileURLToPath } from 'node:url'
+
+const projectRoot = fileURLToPath(new URL('.', import.meta.url))
+
+/** @type {import('next').NextConfig} */
 const nextConfig = {
-  serverExternalPackages: ['playwright-core', '@sparticuz/chromium'],
   turbopack: {
-    root: process.cwd(),
+    root: projectRoot,
   },
+  serverExternalPackages: ['playwright-core', '@sparticuz/chromium'],
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
   },

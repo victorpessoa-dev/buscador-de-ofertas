@@ -39,6 +39,18 @@ function formatCurrency(value) {
   }).format(Number(value) || 0)
 }
 
+function formatNumber(value) {
+  return new Intl.NumberFormat("pt-BR").format(Number(value) || 0)
+}
+
+function toUserMessage(message, fallback) {
+  const text = String(message || "").trim()
+  if (/Playwright|Chromium|browserType|spawn|PLAYWRIGHT_EXECUTABLE_PATH|serverless|navegador|verifica..o de seguran.a|verifica??o de seguran?a|pediu verifica??o|bloqueou|nenhum card|coletar ofertas|marketplaces/i.test(text)) {
+    return "Não foi possível buscar ofertas agora. Tente novamente em instantes."
+  }
+  return text || fallback
+}
+
 function pluralizeOffers(count) {
   return count === 1 ? "1 oferta encontrada" : `${count} ofertas encontradas`
 }
@@ -121,7 +133,7 @@ export function OfferSearch() {
           JSON.stringify({ query, filters, results, page, pageSize, sortBy })
         )
       } catch {
-        // Estado temporario apenas para manter a tela ao voltar de uma compra.
+        // Estado temporário apenas para manter a tela ao voltar de uma compra.
       }
     }, 200)
     return () => window.clearTimeout(timeout)
@@ -133,6 +145,9 @@ export function OfferSearch() {
   }
 
   function clearSearch() {
+    requestController.current?.abort()
+    requestController.current = null
+    setIsSearching(false)
     setQuery("")
     setFilters(initialFilters)
     setResults(null)
@@ -168,7 +183,7 @@ export function OfferSearch() {
       const data = await response.json().catch(() => ({}))
 
       if (!response.ok) {
-        throw new Error(data.error || "Nao foi possivel buscar ofertas.")
+        throw new Error(data.error || "Não foi possível buscar ofertas.")
       }
 
       setResults(data)
@@ -176,7 +191,7 @@ export function OfferSearch() {
     } catch (err) {
       if (err instanceof DOMException && err.name === "AbortError") return
       setResults(null)
-      setError(err instanceof Error ? err.message : "Nao foi possivel buscar ofertas.")
+      setError(toUserMessage(err instanceof Error ? err.message : "", "Não foi possível buscar ofertas."))
     } finally {
       if (requestController.current === controller) {
         requestController.current = null
@@ -204,13 +219,13 @@ export function OfferSearch() {
       const data = await response.json().catch(() => ({}))
 
       if (!response.ok) {
-        throw new Error(data.error || "Nao foi possivel converter o link.")
+        throw new Error(data.error || "Não foi possível preparar o link.")
       }
 
       popup.location.href = data.redirectUrl
     } catch (err) {
       popup?.close()
-      setError(err instanceof Error ? err.message : "Nao foi possivel converter o link.")
+      setError(toUserMessage(err instanceof Error ? err.message : "", "Não foi possível preparar o link."))
     } finally {
       setConvertingKey(null)
     }
@@ -267,6 +282,14 @@ export function OfferSearch() {
               </div>
               <div className="grid grid-cols-2 gap-2 sm:flex">
                 <Button
+                  type="button"
+                  onClick={clearSearch}
+                  className="h-11 gap-2 border border-rose-200 bg-rose-50 px-5 text-rose-700 shadow-sm hover:bg-rose-100"
+                >
+                  <X className="size-4" />
+                  Limpar
+                </Button>
+                <Button
                   type="submit"
                   className="generate-button h-11 gap-2 px-5 shadow-lg shadow-primary/20"
                   disabled={isSearching}
@@ -277,15 +300,6 @@ export function OfferSearch() {
                     <Search className="size-4" />
                   )}
                   {isSearching ? "Buscando..." : "Buscar Ofertas"}
-                </Button>
-                <Button
-                  type="button"
-                  onClick={clearSearch}
-                  className="h-11 gap-2 border border-rose-200 bg-rose-50 px-5 text-rose-700 shadow-sm hover:bg-rose-100"
-                  disabled={isSearching}
-                >
-                  <X className="size-4" />
-                  Limpar
                 </Button>
               </div>
             </div>
@@ -330,7 +344,7 @@ export function OfferSearch() {
 
             <div className="grid grid-cols-2 gap-2 md:col-span-2">
               <label className="flex flex-col gap-1.5 text-sm">
-                <span className="font-medium">Preco minimo</span>
+                <span className="font-medium">Preço mínimo</span>
                 <Input
                   type="number"
                   min="0"
@@ -342,7 +356,7 @@ export function OfferSearch() {
                 />
               </label>
               <label className="flex flex-col gap-1.5 text-sm">
-                <span className="font-medium">Preco maximo</span>
+                <span className="font-medium">Preço máximo</span>
                 <Input
                   type="number"
                   min="0"
@@ -358,7 +372,7 @@ export function OfferSearch() {
             <label className="flex flex-col gap-1.5 text-sm">
               <span className="inline-flex items-center gap-2 font-medium">
                 <Star className="size-4" />
-                Avaliacao
+                Avaliação
               </span>
               <select
                 value={filters.minRating}
@@ -381,7 +395,7 @@ export function OfferSearch() {
                 disabled={isSearching}
               />
               <Truck className="size-4 text-muted-foreground" />
-              Frete gratis
+              Frete grátis
             </label>
           </div>
 
@@ -397,6 +411,16 @@ export function OfferSearch() {
         </form>
       </Card>
 
+      {isSearching && (
+        <Card role="status" className="flex items-center gap-3 p-4 text-sm text-muted-foreground" aria-live="polite">
+          <LoaderCircle className="size-5 animate-spin text-primary" />
+          <div>
+            <p className="font-medium text-foreground">Buscando ofertas...</p>
+            <p>Coletando produtos confiáveis com preço, desconto, avaliação e frete.</p>
+          </div>
+        </Card>
+      )}
+
       {results && (
         <section className="result-enter flex flex-col gap-3" aria-live="polite">
           <div className="flex flex-wrap items-center justify-between gap-3">
@@ -405,8 +429,7 @@ export function OfferSearch() {
                 {pluralizeOffers(totalResults)}
               </h2>
               <p className="text-sm text-muted-foreground">
-                Busca por: {results.query}
-                {results.cached ? " · cache" : ""}
+                Busca por: {results.query}
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-3">
@@ -430,7 +453,7 @@ export function OfferSearch() {
                 </select>
               </label>
               <label className="flex items-center gap-2 text-sm text-muted-foreground">
-                Por pagina
+                Por página
                 <select
                   value={pageSize}
                   onChange={(event) => {
@@ -482,7 +505,7 @@ export function OfferSearch() {
                         {product.confiavel && (
                           <span className="inline-flex items-center gap-1 rounded-md bg-background/95 px-2 py-1 text-xs font-semibold text-emerald-700 shadow-md ring-1 ring-emerald-200 backdrop-blur">
                             <img src="/icon.svg" alt="" className="size-3.5 rounded-sm" />
-                            Selo confiavel
+                            Selo confiável
                           </span>
                         )}
                       </div>
@@ -510,7 +533,7 @@ export function OfferSearch() {
                           </span>
                         )}
                         <strong className="text-2xl font-bold leading-none text-emerald-700">
-                          {product.preco > 0 ? formatCurrency(product.preco) : "Ver preco na loja"}
+                          {product.preco > 0 ? formatCurrency(product.preco) : "Ver preço na loja"}
                         </strong>
                       </div>
 
@@ -523,7 +546,7 @@ export function OfferSearch() {
                         {product.freteGratis && (
                           <span className="inline-flex items-center gap-1 rounded bg-sky-50 px-1.5 py-0.5 text-xs font-medium text-sky-700 ring-1 ring-sky-200">
                             <Truck className="size-3.5" />
-                            Frete gratis
+                            Frete grátis
                           </span>
                         )}
                       </div>
@@ -536,7 +559,7 @@ export function OfferSearch() {
                         )}
                         {product.vendas > 0 && (
                           <span className="rounded-md bg-muted/60 px-2 py-1">
-                            {Math.round(product.vendas)} vendas
+                            {formatNumber(Math.round(product.vendas))} vendas
                           </span>
                         )}
                       </div>
@@ -566,7 +589,7 @@ export function OfferSearch() {
           {totalPages > 1 && (
             <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border/80 bg-background/60 p-3">
               <p className="text-sm text-muted-foreground">
-                Pagina {currentPage} de {totalPages}
+                Página {currentPage} de {totalPages}
               </p>
               <div className="flex items-center gap-2">
                 <Button
@@ -585,7 +608,7 @@ export function OfferSearch() {
                   disabled={currentPage === totalPages}
                   onClick={() => setPage((value) => Math.min(totalPages, value + 1))}
                 >
-                  Proxima
+                  Próxima
                 </Button>
               </div>
             </div>
